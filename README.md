@@ -6,7 +6,7 @@ A super-simple python console/text mode progress bar.  There's a ton of them
 around (StackOverflow, etc.), just my own version.  Output looks something like
 the following:
 ```
-▐█████████░░░░░░░░▌ 3/15 (downloading...)
+▐█████░░░░░░░░░░▌ 5/15 downloading: f04.bin
 ```
 
 Sample code to use `pyprog.py`:
