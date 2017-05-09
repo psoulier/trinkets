@@ -1,6 +1,6 @@
 import time
 
-def pyprogress(barwidth, completed, total, caption, conswidth=80):
+class PyProgress:
     """
     barwidth: Number of characters in progress bar.
     completed: Things completed.
@@ -11,27 +11,51 @@ def pyprogress(barwidth, completed, total, caption, conswidth=80):
     Output looks something like this:
     #▐█████████░░░░░░░░▌ 3/15 (downloading...)
     """
+    def __init__(self, barwidth, total, conswidth=80, percentage=False):
+        self.barwidth = barwidth
+        self.total = total
+        self.conswidth = conswidth
+        self.percentage = percentage
+        self.completed = 0
 
-    fill = '█'
-    empty = '░'
-    progressfmt = '\r▐{}{}▌ {}/{} '
+    def start(self):
+        """
+        Starts progress bar and shows 0% initial status.  Can also use to reset bar.
+        """
 
-    filled = int((barwidth*(completed/total)))
-    progress = progressfmt.format(fill*filled, (barwidth-filled)*empty, completed, total)
-    trailing = conswidth - len(progress)
+        self.complete = 0
 
-    # Truncate caption if it's too big.  Usually files, so clip the beginning of the string
-    # since the end is usually more interesting.
-    if len(caption) > trailing:
-        caption = '...' + caption[-trailing+3:]
+    def update(self, caption):
+        """
+        Complete one thing and update progress bar accordingly.
+        """
 
-    # Print progress (\r just moves cursor to the beginning of line without a linefeed.
-    print(progress + caption + ' ' * (conswidth-len(progress)-len(caption)), end='')
+        fill = '█'
+        empty = '░'
 
-    # When done, clear caption and print newline.
-    if completed == total:
-        caption = "Done."
-        print(progress + caption + ' ' * (conswidth-len(progress)-len(caption)), end='')
-        print('')
+        self.completed += 1
+
+        # Show percentage complete or thingies of total...
+        if self.percentage:
+            updt = "{0:.1f}%".format(100.0*round(self.completed/self.total,2))
+        else:
+            updt = '{}/{}'.format(self.completed, self.total)
+
+        filled = int((self.barwidth*(self.completed/self.total)))
+        progress = '\r▐{}{}▌ {} '.format(fill*filled, (self.barwidth-filled)*empty, updt)
+        trailing = self.conswidth - len(progress)
+
+        # Truncate caption if it's too big.  
+        if len(caption) > trailing:
+            caption = caption[0:trailing-3:] + '...'
+
+        # Print progress (\r just moves cursor to the beginning of line without a linefeed.
+        print(progress + caption + ' ' * (self.conswidth-len(progress)-len(caption)), end='')
+
+        # When done, clear caption and print newline.
+        if self.completed == self.total:
+            caption = "Done."
+            print(progress + caption + ' ' * (self.conswidth-len(progress)-len(caption)), end='')
+            print('')
 
 

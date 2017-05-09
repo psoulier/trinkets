@@ -29,9 +29,9 @@ files = ['downloading: a.foo',
       'unpacking: barf.splat'
     ]
 
-i = 0
+prog = PyProgress(15, len(files), percentage=True)
+prog.start()
 for f in files:
-    pyprogress(15, i, len(files)-1, f)
-    i += 1
-    time.sleep(0.1)
+    prog.update(f)
+    time.sleep(.1)
 ```
