@@ -11,27 +11,26 @@ the following:
 
 Sample code to use `pyprog.py`:
 ```
-files = ['downloading: a.foo',
-      'downloading: foo.bin',
-      'downloading: f01.bin',
-      'downloading: f02.bin',
-      'downloading: f03.bin',
-      'downloading: f04.bin',
-      'downloading: f056bin',
-      'downloading: f017bin',
-      'downloading: f08.bin',
-      'downloading: f09.bin',
-      'downloading: f11.bin',
-      'downloading: f21.bin',
-      'downloading: f31.bin',
-      'unpacking: blah/blah/nothing/nowhere/garbage/goforthandprint/piggyback/poohbear/piglet/somethingbig.bin',
-      'unpacking: nothing.bin',
-      'unpacking: barf.splat'
-    ]
+files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+         'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't']
 
 prog = PyProgress(15, len(files), percentage=True)
 prog.start()
 for f in files:
-    prog.update(f)
+    prog.update('downloading: ' + f)
     time.sleep(.1)
 ```
+
+## printd (`printdbg.cpp` and `printdbg.hpp`)
+The `printd` function is a formatted print function that provides a subset of C's`printf`, but not as full-featured.  It's intended for small, embedded systems
+and utilizes C++ templates to a) make it safer than `printf` and b) avoids
+dragging in the varargs library.  This code does not require any
+library support and is a good drop-in for debug prints to a serial console.
+Supported formatting options include: `d`, `u`, `x`, `p`, `c`, `s`, and padding
+width (e.g., `%6d` or `%08x`).  The `l` qualifier for numbers is also supported,
+but is ignored.  
+
+### Limitations
+* `printd` supports integer types only as large as `uintptr_t`. 
+* Floats are not supported (wouldn't be a big deal to add them, I just don't use
+them for debugging all that often).
